@@ -6,17 +6,28 @@ import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import getCompanies from "@/libs/getCompanies";
+import { useSession } from "next-auth/react";
 
 export default function Companies() {
+  const { data: session } = useSession();
+
   const [companies, setCompanies] = useState<CompaniesJson | null>(null);
   const [filteredCompanies, setFilteredCompanies] = useState<CompanyItem[]>([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getCompanies();
-      setCompanies(data);
+      try {
+        const data = await getCompanies();
+        setCompanies(data);
+        setFilteredCompanies(data.data || []);
+      } catch (error) {
+        console.error("Error fetching companies data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -43,23 +54,28 @@ export default function Companies() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+
           <button className="absolute inset-y-0 end-0 flex items-center pe-5">
             <Icon icon="line-md:search" className="text-dp-border size-4" />
           </button>
         </div>
 
         {/* for admin to create space */}
-        <div className="w-[200px]">
-          <Button
-            btnType="submit"
-            text="Create Company"
-            onClick={() => router.push("/companies/createCompany")}
-          />
-        </div>
+        {session?.user?.role === "admin" && (
+          <div className="w-[200px]">
+            <Button
+              btnType="submit"
+              text="Create Company"
+              onClick={() => router.push("/companies/createCompany")}
+            />
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-8 pt-4 xl:grid xl:grid-cols-2">
-        {filteredCompanies.length > 0 ? (
+        {loading ? (
+          <div className="text-center">Loading...</div>
+        ) : filteredCompanies.length > 0 ? (
           filteredCompanies.map((companyItem: CompanyItem) => (
             <div key={companyItem.id}>
               <CompanyCard
@@ -71,7 +87,7 @@ export default function Companies() {
             </div>
           ))
         ) : (
-          <p>No companies found matching "{search}"</p>
+          <div>No companies found matching "{search}"</div>
         )}
       </div>
     </div>
