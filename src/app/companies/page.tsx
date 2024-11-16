@@ -2,7 +2,6 @@
 
 import Button from "@/components/Button/Button";
 import CompanyCard from "@/components/Card/CompanyCard";
-import TopMenu from "@/components/TopMenu/TopMenu";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useState } from "react";
@@ -72,45 +71,42 @@ export default function Companies() {
   );
 
   return (
-    <div className="bg-white w-screen h-screen min-w-fit min-h-fit overflow-x-scroll">
-      <TopMenu />
-      <div className="p-7 space-y-2">
-        {/* Search function */}
-        <div className="flex flex-row justify-between items-center">
-          <div className="relative w-[500px]">
-            <input
-              className="rounded-3xl border border-dp-border focus:border-dp-blue focus:outline-none placeholder:text-dp-border text-black pl-5 pr-10 py-3 w-full"
-              placeholder="Find Company"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <button className="absolute inset-y-0 end-0 flex items-center pe-5">
-              <Icon icon="line-md:search" className="text-dp-border size-4" />
-            </button>
-          </div>
-
-          {/* for admin to create space */}
-          <Link href="/companies/createCompany" className="w-[200px]">
-            <Button btnType="submit" text="Create Company" />
-          </Link>
+    <div className="space-y-2 h-full">
+      {/* Search function */}
+      <div className="flex flex-row justify-between items-center">
+        <div className="relative w-[500px]">
+          <input
+            className="rounded-3xl border border-dp-border focus:border-dp-blue focus:outline-none placeholder:text-dp-border text-black pl-5 pr-10 py-3 w-full"
+            placeholder="Find Company"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button className="absolute inset-y-0 end-0 flex items-center pe-5">
+            <Icon icon="line-md:search" className="text-dp-border size-4" />
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 pt-4 xl:grid xl:grid-cols-2">
-          {filteredCompanies.length > 0 ? (
-            filteredCompanies.map((companyItem: CompanyItem) => (
-              <div key={companyItem.id}>
-                <CompanyCard
-                  id={companyItem.id}
-                  name={companyItem.name}
-                  business={companyItem.business}
-                  imgSrc={companyItem.picture}
-                />
-              </div>
-            ))
-          ) : (
-            <p>No companies found matching "{search}"</p>
-          )}
-        </div>
+        {/* for admin to create space */}
+        <Link href="/companies/createCompany" className="w-[200px]">
+          <Button btnType="submit" text="Create Company" />
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 gap-8 pt-4 xl:grid xl:grid-cols-2">
+        {filteredCompanies.length > 0 ? (
+          filteredCompanies.map((companyItem: CompanyItem) => (
+            <div key={companyItem.id}>
+              <CompanyCard
+                id={companyItem.id}
+                name={companyItem.name}
+                business={companyItem.business}
+                imgSrc={companyItem.picture}
+              />
+            </div>
+          ))
+        ) : (
+          <p>No companies found matching "{search}"</p>
+        )}
       </div>
     </div>
   );

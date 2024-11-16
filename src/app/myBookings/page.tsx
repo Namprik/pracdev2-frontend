@@ -1,5 +1,4 @@
 import BookingCard from "@/components/Card/BookingCard";
-import TopMenu from "@/components/TopMenu/TopMenu";
 
 const mockBooking: BookingItem[] = [
   {
@@ -21,18 +20,15 @@ const mockBooking: BookingItem[] = [
 export default function myBookings() {
   const bookingItems = mockBooking;
   return (
-    <div className="bg-white w-screen h-screen min-w-fit min-h-fit">
-      <TopMenu />
-      <div className="p-7 pt-12 grid-flow-col space-y-7">
-        {bookingItems.length === 0 && (
-          <div className="m-auto text-2xl font-semibold text-center">
-            No Interview Booking
-          </div>
-        )}
-        {bookingItems.map((bookItem) => (
-          <BookingCard bookingItem={bookItem} />
-        ))}
-      </div>
+    <div className="pt-12 grid-flow-col space-y-7 h-full">
+      {bookingItems.length === 0 && (
+        <div className="m-auto text-2xl font-semibold text-center">
+          No Interview Booking
+        </div>
+      )}
+      {bookingItems.map((bookItem) => (
+        <BookingCard bookingItem={bookItem} />
+      ))}
     </div>
   );
 }
