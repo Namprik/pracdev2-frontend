@@ -3,74 +3,34 @@
 import Button from "@/components/Button/Button";
 import CompanyCard from "@/components/Card/CompanyCard";
 import { Icon } from "@iconify/react";
-import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-const mockCompanies: CompaniesJson = {
-  success: true,
-  count: 3,
-  pagination: {
-    currentPage: 1,
-    totalPages: 1,
-    pageSize: 3,
-  },
-  data: [
-    {
-      _id: "64f5a1e1e6b79c001234abcd",
-      name: "Tech Solutions Inc.",
-      business: "IT Services",
-      address: "123 Silicon Valley",
-      district: "Palo Alto",
-      province: "California",
-      postalcode: "94301",
-      tel: "+1-650-555-0101",
-      picture:
-        "https://drive.google.com/thumbnail?id=1HQErqHy0irI9hefoFqzAerRCGqK4mraA&sz=w1000",
-      __v: 0,
-      id: "64f5a1e1e6b79c001234abcd",
-    },
-    {
-      _id: "64f5a1e1e6b79c001234abce",
-      name: "Green Energy Co.",
-      business: "Renewable Energy",
-      address: "456 Solar Street",
-      district: "Austin",
-      province: "Texas",
-      postalcode: "73301",
-      tel: "+1-512-555-0202",
-      picture:
-        "https://drive.google.com/thumbnail?id=1HQErqHy0irI9hefoFqzAerRCGqK4mraA&sz=w1000",
-      __v: 0,
-      id: "64f5a1e1e6b79c001234abce",
-    },
-    {
-      _id: "64f5a1e1e6b79c001234abcf",
-      name: "HealthCare Plus",
-      business: "Healthcare Services",
-      address: "789 Wellness Avenue",
-      district: "Orlando",
-      province: "Florida",
-      postalcode: "32801",
-      tel: "+1-407-555-0303",
-      picture:
-        "https://drive.google.com/thumbnail?id=1HQErqHy0irI9hefoFqzAerRCGqK4mraA&sz=w1000",
-      __v: 0,
-      id: "64f5a1e1e6b79c001234abcf",
-    },
-  ],
-};
+import getCompanies from "@/libs/getCompanies";
 
 export default function Companies() {
+  const [companies, setCompanies] = useState<CompaniesJson | null>(null);
+  const [filteredCompanies, setFilteredCompanies] = useState<CompanyItem[]>([]);
   const [search, setSearch] = useState("");
-  const companies = mockCompanies;
   const router = useRouter();
 
-  const filteredCompanies = companies.data.filter(
-    (company) =>
-      company.name.toLowerCase().includes(search.toLowerCase()) ||
-      company.business.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getCompanies();
+      setCompanies(data);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (companies?.data) {
+      const filtered = companies.data.filter(
+        (company: CompanyItem) =>
+          company.name.toLowerCase().includes(search.toLowerCase()) ||
+          company.business.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredCompanies(filtered);
+    }
+  }, [search, companies]);
 
   return (
     <div className="space-y-2 h-full">
