@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import Button from "@/components/Button/Button";
+import { useRouter } from "next/navigation";
 
 const mockCompany: CompanyItem = {
   _id: "64f5a1e1e6b79c001234abcd",
@@ -20,6 +23,7 @@ const mockCompany: CompanyItem = {
 
 export default function Company({ params }: { params: { cid: string } }) {
   const company = mockCompany;
+  const router = useRouter();
   return (
     <div className="space-y-5 h-full">
       <Image src={company.picture} alt="image" width={758} height={376} />
@@ -45,20 +49,22 @@ export default function Company({ params }: { params: { cid: string } }) {
 
         {/* btn for go back or booking */}
         <div className="grid grid-cols-2 gap-4 w-[50%] place-self-end">
-          {/* <Link href="/companies">
-              <Button btnType="cancel" text="Back" />
-            </Link> */}
-          <Link href={`/companies/${company.id}/editCompany`}>
-            <Button btnType="cancel" text="Edit" />
-          </Link>
-          <Link href={`/companies/${company.id}/booking`}>
-            <Button btnType="submit" text="Booking" />
-          </Link>
+          {/* <Button btnType="cancel" text="Back" onClick={() => router.back()}/> */}
+          <Button
+            btnType="cancel"
+            text="Edit"
+            onClick={() => router.push(`/companies/${params.cid}/editCompany`)}
+          />
+          <Button
+            btnType="submit"
+            text="Booking"
+            onClick={() => router.push(`/companies/${params.cid}/booking`)}
+          />
         </div>
       </div>
-      <Link href="/companies" className="flex w-[25%] min-w-fit">
-        <Button btnType="cancel" text="Back" />
-      </Link>
+      <div className="flex w-[25%] min-w-fit">
+        <Button btnType="cancel" text="Back" onClick={() => router.back()} />
+      </div>
     </div>
   );
 }

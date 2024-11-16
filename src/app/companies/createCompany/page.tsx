@@ -4,13 +4,15 @@ import Button from "@/components/Button/Button";
 import TextInput from "@/components/Input/TextInput";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreateCompany() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [business, setBusiness] = useState("");
   const [picture, setPicture] = useState("");
   const [address, setAddress] = useState("");
-
   const [province, setProvince] = useState("");
   const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
@@ -85,9 +87,11 @@ export default function CreateCompany() {
           />
         </div>
         <div className="grid-flow-col space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:items-center lg:gap-3 lg:place-self-end lg:place-items-end lg:w-[50%]">
-          <Link href={"/companies"} className="w-full">
-            <Button btnType="cancel" text="Cancel" />
-          </Link>
+          <Button
+            btnType="cancel"
+            text="Cancel"
+            onClick={() => router.back()}
+          />
           <Button btnType="submit" text="Submit" type="submit" />
         </div>
       </div>

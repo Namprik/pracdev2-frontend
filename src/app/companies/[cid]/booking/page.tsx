@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 import dayjs, { Dayjs } from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const mockCompany: CompanyItem = {
   _id: "64f5a1e1e6b79c001234abcd",
@@ -24,6 +25,7 @@ const mockCompany: CompanyItem = {
 
 export default function Booking({ params }: { params: { cid: string } }) {
   const company = mockCompany;
+  const router = useRouter();
   const [bookDate, setBookDate] = useState<Dayjs | null>(dayjs());
 
   const makeBooking = () => {
@@ -65,9 +67,12 @@ export default function Booking({ params }: { params: { cid: string } }) {
               onDateChange={(value: Dayjs | null) => setBookDate(value)}
             />
           </div>
-          <Link href={`/companies/${company.id}`}>
-            <Button btnType="cancel" text="Cancel" />
-          </Link>
+          <Button
+            btnType="cancel"
+            text="Cancel"
+            onClick={() => router.push(`/companies/${params.cid}`)}
+          />
+
           <Button btnType="submit" text="Submit" type="submit" />
         </div>
       </form>

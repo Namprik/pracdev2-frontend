@@ -2,13 +2,16 @@ export default function Button({
   btnType,
   type = "button",
   text,
+  onClick,
 }: {
   btnType: string;
   type?: string;
   text: string;
+  onClick?: () => void;
 }) {
   return (
     <button
+      onClick={onClick}
       className={`${
         btnType === "submit"
           ? "bg-dp-blue hover:bg-dp-blue-hover text-white font-bold"

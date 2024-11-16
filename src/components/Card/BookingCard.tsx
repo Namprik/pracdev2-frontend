@@ -19,8 +19,12 @@ const mockCompany: CompanyItem = {
 
 export default function BookingCard({
   bookingItem,
+  onEdit,
+  onDelete,
 }: {
   bookingItem: BookingItem;
+  onEdit: () => void;
+  onDelete: () => void;
 }) {
   const company = mockCompany;
   return (
@@ -38,10 +42,8 @@ export default function BookingCard({
           Booking Date: {bookingItem.bookingDate}
         </label>
         <div className="grow flex flex-row space-x-2 place-self-end place-items-end w-[410px] min-w-fit">
-          <Link href={`/myBookings/${bookingItem.id}`} className="w-full">
-            <Button btnType="cancel" text="Edit" />
-          </Link>
-          <Button btnType="delete" text="Delete" />
+          <Button btnType="cancel" text="Edit" onClick={onEdit} />
+          <Button btnType="delete" text="Delete" onClick={onDelete} />
         </div>
       </div>
     </div>

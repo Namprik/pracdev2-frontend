@@ -5,6 +5,7 @@ import CompanyCard from "@/components/Card/CompanyCard";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const mockCompanies: CompaniesJson = {
   success: true,
@@ -63,6 +64,7 @@ const mockCompanies: CompaniesJson = {
 export default function Companies() {
   const [search, setSearch] = useState("");
   const companies = mockCompanies;
+  const router = useRouter();
 
   const filteredCompanies = companies.data.filter(
     (company) =>
@@ -87,9 +89,13 @@ export default function Companies() {
         </div>
 
         {/* for admin to create space */}
-        <Link href="/companies/createCompany" className="w-[200px]">
-          <Button btnType="submit" text="Create Company" />
-        </Link>
+        <div className="w-[200px]">
+          <Button
+            btnType="submit"
+            text="Create Company"
+            onClick={() => router.push("/companies/createCompany")}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8 pt-4 xl:grid xl:grid-cols-2">

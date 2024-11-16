@@ -1,4 +1,7 @@
+"use client";
+
 import BookingCard from "@/components/Card/BookingCard";
+import { useRouter } from "next/navigation";
 
 const mockBooking: BookingItem[] = [
   {
@@ -19,6 +22,7 @@ const mockBooking: BookingItem[] = [
 
 export default function myBookings() {
   const bookingItems = mockBooking;
+  const router = useRouter();
   return (
     <div className="pt-12 grid-flow-col space-y-7 h-full">
       {bookingItems.length === 0 && (
@@ -27,7 +31,11 @@ export default function myBookings() {
         </div>
       )}
       {bookingItems.map((bookItem) => (
-        <BookingCard bookingItem={bookItem} />
+        <BookingCard
+          bookingItem={bookItem}
+          onEdit={() => router.push(`/myBookings/${bookItem.id}`)}
+          onDelete={() => console.log("delete")}
+        />
       ))}
     </div>
   );

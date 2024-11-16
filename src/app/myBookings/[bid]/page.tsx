@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useRouter } from "next/navigation";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,6 +37,8 @@ const mockBooking: BookingItem = {
 };
 
 export default function Company({ params }: { params: { cid: string } }) {
+  const router = useRouter();
+
   const company = mockCompany;
   const [bookDate, setBookDate] = useState<Dayjs | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -91,9 +94,12 @@ export default function Company({ params }: { params: { cid: string } }) {
               />
             )}
           </div>
-          <Link href={`/myBookings`}>
-            <Button btnType="cancel" text="Cancel" />
-          </Link>
+          <Button
+            btnType="cancel"
+            text="Cancel"
+            onClick={() => router.back()}
+          />
+
           <Button btnType="submit" text="Confirm" type="submit" />
         </div>
       </form>

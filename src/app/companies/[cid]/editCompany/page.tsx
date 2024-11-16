@@ -4,6 +4,7 @@ import Button from "@/components/Button/Button";
 import TextInput from "@/components/Input/TextInput";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const mockCompany: CompanyItem = {
   _id: "64f5a1e1e6b79c001234abcd",
@@ -22,6 +23,7 @@ const mockCompany: CompanyItem = {
 
 export default function EditCompany({ params }: { params: { cid: string } }) {
   const company = mockCompany;
+  const router = useRouter();
 
   const [name, setName] = useState("");
   const [business, setBusiness] = useState("");
@@ -120,9 +122,12 @@ export default function EditCompany({ params }: { params: { cid: string } }) {
           </div>
         )}
         <div className="grid-flow-col space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:items-center lg:gap-3 lg:place-self-end lg:place-items-end lg:w-[50%]">
-          <Link href={`/companies/${company.id}`} className="w-full">
-            <Button btnType="cancel" text="Cancel" />
-          </Link>
+          <Button
+            btnType="cancel"
+            text="Cancel"
+            onClick={() => router.back()}
+          />
+
           <Button btnType="submit" text="Submit" type="submit" />
         </div>
       </div>
