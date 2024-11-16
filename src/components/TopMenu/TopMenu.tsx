@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 
 export type UserPage = "Companies" | "My Bookings";
+
 export default function TopMenu({
-  username,
   focus,
+  name,
 }: {
-  username: string;
   focus: UserPage;
+  name: string;
 }) {
   const navigationLinks = [
     { name: "Companies", href: "/companies" },
@@ -32,7 +35,7 @@ export default function TopMenu({
       </div>
       <div className="flex flex-row space-x-5 items-center">
         <label className="font-semibold text-xl text-nowrap truncate">
-          Hello, <label className="font-normal">{username}</label>
+          Hello, <label className="font-normal">{name}</label>
         </label>
         <Link href="/signIn">
           <Icon icon="mdi:logout" className="text-white size-7" />
