@@ -4,22 +4,63 @@ import Button from "@/components/Button/Button";
 import TextInput from "@/components/Input/TextInput";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function SignUp() {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signUp = () => {
-    if (name && phone && email && password) {
-      console.log("sign up", name, email, phone, password);
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/v1/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            tel: phone,
+            email,
+            password,
+            role: "user",
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to sign up");
+      }
+
+      const user = await response.json();
+
+      // Auto sign in after sign up
+      const signInResponse = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (!signInResponse?.ok) {
+        throw new Error("Failed to sign in after sign-up");
+      }
+      router.push("/companies");
+    } catch (error: unknown) {
+      console.error("Sign-ip error:", error);
     }
   };
 
   return (
     <div className="bg-white w-screen h-screen min-w-fit min-h-fit place-content-center">
-      <form onSubmit={signUp}>
+      <form onSubmit={onSubmit}>
         <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit w-[600px] min-w-fit mx-auto space-y-5">
           <h1 className="font-extrabold text-5xl text-center">Sign Up</h1>
           <div className="grid grid-flow-row gap-3">
@@ -46,7 +87,7 @@ export default function SignUp() {
             />
             <TextInput
               label="Password"
-              type="text"
+              type="password"
               required={true}
               onChange={setPassword}
               value={password}
