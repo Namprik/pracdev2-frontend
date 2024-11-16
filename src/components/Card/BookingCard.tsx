@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Agoda from "../../../public/img/Agoda.jpeg";
 import Button from "../Button/Button";
 import Link from "next/link";
 
@@ -13,7 +12,7 @@ const mockCompany: CompanyItem = {
   postalcode: "94301",
   tel: "+1-650-555-0101",
   picture:
-    "https://drive.google.com/file/d/1fQhCOOYlBYTo-nTgV_cgExM639Uaxq_F/view?usp=sharing",
+    "https://drive.google.com/thumbnail?id=1HQErqHy0irI9hefoFqzAerRCGqK4mraA&sz=w1000",
   __v: 0,
   id: "64f5a1e1e6b79c001234abcd",
 };
@@ -26,7 +25,7 @@ export default function BookingCard({
   const company = mockCompany;
   return (
     <div className="shadow-dp-shadow bg-white flex flex-row px-5 py-4 gap-4 rounded-2xl border border-dp-border">
-      <Image src={Agoda} alt="image" width={384} height={268} />
+      <Image src={company.picture} alt="image" width={384} height={268} />
       <div className="flex flex-col space-y-2 grow">
         <h1 className="font-bold text-4xl text-dp-navbar">{company.name}</h1>
         <label className="text-xl text-dp-gray font-extralight">
