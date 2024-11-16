@@ -5,6 +5,7 @@ import TextInput from "@/components/Input/TextInput";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import getCompany from "@/libs/getCompany";
 
 const mockCompany: CompanyItem = {
   _id: "64f5a1e1e6b79c001234abcd",
@@ -22,9 +23,7 @@ const mockCompany: CompanyItem = {
 };
 
 export default function EditCompany({ params }: { params: { cid: string } }) {
-  const company = mockCompany;
-  const router = useRouter();
-
+  const [company, setCompany] = useState<CompanyItem | null>(null);
   const [name, setName] = useState("");
   const [business, setBusiness] = useState("");
   const [picture, setPicture] = useState("");
@@ -33,25 +32,34 @@ export default function EditCompany({ params }: { params: { cid: string } }) {
   const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
 
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setName(company.name);
-      setBusiness(company.business);
-      setPicture(company.picture);
-      setAddress(company.address);
-      setProvince(company.province);
-      setCode(company.postalcode);
-      setPhone(company.tel);
-      setLoading(false);
-    }, 1000);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const data = await getCompany(params.cid);
+        setCompany(data.data);
+        setName(data.data.name);
+        setBusiness(data.data.business);
+        setPicture(data.data.picture);
+        setAddress(data.data.address);
+        setProvince(data.data.province);
+        setCode(data.data.postalcode);
+        setPhone(data.data.tel);
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [params.cid]);
 
   const editCompany = () => {
     if (name && business && picture && address && province && code) {
       console.log(
-        "create company",
+        "edit company",
         name,
         business,
         picture,
@@ -64,7 +72,7 @@ export default function EditCompany({ params }: { params: { cid: string } }) {
 
   return (
     <form onSubmit={editCompany} className="place-content-center h-full">
-      <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit lg:w-[1200px] w-[600px] min-w-fit mx-auto space-y-5 lg:space-y-16">
+      <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit lg:w-[1000px] w-[600px] min-w-fit mx-auto space-y-5 lg:space-y-16">
         <h1 className="font-extrabold text-5xl text-center">Edit Company</h1>
         {loading ? (
           <div className="text-center">Loading...</div>
