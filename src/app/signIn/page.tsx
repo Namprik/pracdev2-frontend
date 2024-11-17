@@ -36,7 +36,7 @@ export default function SignIn() {
     <div className="bg-white w-screen h-screen min-w-fit min-h-fit place-content-center">
       <form onSubmit={onSubmit}>
         <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit w-[600px] min-w-fit mx-auto space-y-5">
-          <h1 className="font-extrabold text-5xl text-center">Sign Up</h1>
+          <h1 className="font-extrabold text-5xl text-center">Sign In</h1>
           <div className="grid grid-flow-row gap-3">
             <TextInput
               label="Email"
