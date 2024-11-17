@@ -4,9 +4,10 @@ import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Button from "@/components/Button/Button";
 import { useRouter } from "next/navigation";
-import getCompany from "@/libs/getCompany";
+import { deleteCompany, getCompany } from "@/api/companies";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Company({ params }: { params: { cid: string } }) {
   const { data: session } = useSession();
@@ -27,6 +28,23 @@ export default function Company({ params }: { params: { cid: string } }) {
     };
     fetchData();
   }, [params.cid]);
+
+  // delete company id
+  const onDelete = async () => {
+    if (session) {
+      try {
+        const response = await deleteCompany(session.user.token, params.cid);
+
+        if (!response.success) {
+          alert(`Error delete company id: ${params.cid}`);
+          return;
+        }
+        router.push("/companies");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <>
@@ -62,9 +80,9 @@ export default function Company({ params }: { params: { cid: string } }) {
               <label className="font-light">{company.tel}</label>
             </div>
 
-            {/* btn for go back or booking */}
-            <div className="grid grid-cols-2 gap-4 w-[50%] place-self-end">
-              {session?.user.role === "admin" ? (
+            {/* btn for admin -> edit/delete */}
+            {session?.user.role === "admin" && (
+              <div className="grid grid-cols-2 gap-4 w-[50%] place-self-end">
                 <Button
                   btnType="cancel"
                   text="Edit"
@@ -72,30 +90,24 @@ export default function Company({ params }: { params: { cid: string } }) {
                     router.push(`/companies/${params.cid}/editCompany`)
                   }
                 />
-              ) : (
-                <Button
-                  btnType="cancel"
-                  text="Back"
-                  onClick={() => router.back()}
-                />
-              )}
-
-              <Button
-                btnType="submit"
-                text="Booking"
-                onClick={() => router.push(`/companies/${params.cid}/booking`)}
-              />
-            </div>
+                <Button btnType="delete" text="Delete" onClick={onDelete} />
+              </div>
+            )}
           </div>
-          {session?.user.role === "admin" && (
-            <div className="flex w-[25%] min-w-fit">
-              <Button
-                btnType="cancel"
-                text="Back"
-                onClick={() => router.back()}
-              />
-            </div>
-          )}
+
+          <div className="flex flex-row">
+            <Button
+              btnType="cancel"
+              text="Back"
+              onClick={() => router.back()}
+            />
+            <div className="w-[50%]"></div>
+            <Button
+              btnType="submit"
+              text="Booking"
+              onClick={() => router.push(`/companies/${params.cid}/booking`)}
+            />
+          </div>
         </div>
       )}
     </>

@@ -5,6 +5,7 @@ import TextInput from "@/components/Input/TextInput";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { createCompany } from "@/api/companies";
 
 export default function CreateCompany() {
   const router = useRouter();
@@ -18,24 +19,36 @@ export default function CreateCompany() {
   const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
 
-  const createCompany = () => {
-    if (name && business && picture && address && province && code) {
-      console.log(
-        "create company",
-        name,
-        business,
-        picture,
-        address,
-        province,
-        code
-      );
+  // create company
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!session) return;
+
+    const data: createCompany = {
+      name: name,
+      business: business,
+      picture: picture,
+      address: address,
+      province: province,
+      postalcode: code,
+      tel: phone,
+    };
+    try {
+      const response = await createCompany(session.user.token, data);
+      if (!response.success) {
+        console.log("Failed to create company");
+      }
+
+      router.push("/companies");
+    } catch (error) {
+      console.error("Error to create company: ", error);
     }
   };
 
   return (
     <>
       {session?.user.role === "admin" ? (
-        <form onSubmit={createCompany} className="place-content-center h-full">
+        <form onSubmit={onSubmit} className="place-content-center h-full">
           <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit lg:w-[1000px] w-[600px] min-w-fit mx-auto space-y-5 lg:space-y-16">
             <h1 className="font-extrabold text-5xl text-center">
               Create Company

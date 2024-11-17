@@ -6,9 +6,12 @@ import { Icon } from "@iconify/react";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import getCompany from "@/libs/getCompany";
+import { getCompany } from "@/api/companies";
+import { useSession } from "next-auth/react";
+import { getBookings, createBooking } from "@/api/bookings";
 
 export default function Booking({ params }: { params: { cid: string } }) {
+  const { data: session } = useSession();
   const [company, setCompany] = useState<CompanyItem | null>(null);
   const router = useRouter();
   const [bookDate, setBookDate] = useState<Dayjs | null>(dayjs());
@@ -28,11 +31,41 @@ export default function Booking({ params }: { params: { cid: string } }) {
     fetchData();
   }, [params.cid]);
 
-  const makeBooking = () => {
-    if (bookDate) {
-      console.log(params);
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!bookDate || !session || !params.cid) {
+      alert("Missing required data.");
+      return;
     }
-    console.log("please enter date");
+
+    try {
+      // get all booking to check count limit
+      const response = await getBookings(session.user.token);
+      if (!response.success) {
+        alert("Failed to get all booking");
+        return;
+      }
+      if (response.count >= 3) {
+        alert("You have reached the maximum booking limit of 3.");
+        return;
+      }
+
+      // Create booking
+      const res = await createBooking(
+        session.user.token,
+        params.cid,
+        bookDate.format("YYYY-MM-DD")
+      );
+
+      if (!res.success) {
+        alert("Failed to create booking.");
+        return;
+      }
+      router.push("/myBookings");
+    } catch (error) {
+      console.error("Error during booking process:", error);
+    }
   };
 
   return (
@@ -59,7 +92,7 @@ export default function Booking({ params }: { params: { cid: string } }) {
           </div>
         </div>
       )}
-      <form onSubmit={makeBooking}>
+      <form onSubmit={onSubmit}>
         <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit min-w-fit w-full mx-auto space-y-7">
           <h1 className="font-extrabold text-5xl text-center">
             Create Booking

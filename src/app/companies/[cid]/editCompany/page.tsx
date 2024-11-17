@@ -2,28 +2,14 @@
 
 import Button from "@/components/Button/Button";
 import TextInput from "@/components/Input/TextInput";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import getCompany from "@/libs/getCompany";
-
-const mockCompany: CompanyItem = {
-  _id: "64f5a1e1e6b79c001234abcd",
-  name: "Tech Solutions Inc.",
-  business: "IT Services",
-  address: "123 Silicon Valley",
-  district: "Palo Alto",
-  province: "California",
-  postalcode: "94301",
-  tel: "+1-650-555-0101",
-  picture:
-    "https://drive.google.com/thumbnail?id=1HQErqHy0irI9hefoFqzAerRCGqK4mraA&sz=w1000",
-  __v: 0,
-  id: "64f5a1e1e6b79c001234abcd",
-};
-
+import { getCompany } from "@/api/companies";
+import { useSession } from "next-auth/react";
+import { createCompany, updateCompany } from "@/api/companies";
 export default function EditCompany({ params }: { params: { cid: string } }) {
-  const [company, setCompany] = useState<CompanyItem | null>(null);
+  const { data: session } = useSession();
+
   const [name, setName] = useState("");
   const [business, setBusiness] = useState("");
   const [picture, setPicture] = useState("");
@@ -39,7 +25,6 @@ export default function EditCompany({ params }: { params: { cid: string } }) {
     const fetchData = async () => {
       try {
         const data = await getCompany(params.cid);
-        setCompany(data.data);
         setName(data.data.name);
         setBusiness(data.data.business);
         setPicture(data.data.picture);
@@ -56,22 +41,39 @@ export default function EditCompany({ params }: { params: { cid: string } }) {
     fetchData();
   }, [params.cid]);
 
-  const editCompany = () => {
-    if (name && business && picture && address && province && code) {
-      console.log(
-        "edit company",
-        name,
-        business,
-        picture,
-        address,
-        province,
-        code
+  // update company
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!session) return;
+
+    const data: createCompany = {
+      name: name,
+      business: business,
+      picture: picture,
+      address: address,
+      province: province,
+      postalcode: code,
+      tel: phone,
+    };
+    try {
+      const response = await updateCompany(
+        session.user.token,
+        params.cid,
+        data
       );
+      if (!response.success) {
+        console.error("Failed to update company");
+        return;
+      }
+      console.log("update company successfully");
+      router.push("/companies");
+    } catch (error) {
+      console.error("Error to update company: ", error);
     }
   };
 
   return (
-    <form onSubmit={editCompany} className="place-content-center h-full">
+    <form onSubmit={onSubmit} className="place-content-center h-full">
       <div className="rounded-2xl border border-dp-border py-10 px-12 h-hit lg:w-[1000px] w-[600px] min-w-fit mx-auto space-y-5 lg:space-y-16">
         <h1 className="font-extrabold text-5xl text-center">Edit Company</h1>
         {loading ? (

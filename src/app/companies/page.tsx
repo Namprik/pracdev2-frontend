@@ -5,7 +5,7 @@ import CompanyCard from "@/components/Card/CompanyCard";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import getCompanies from "@/libs/getCompanies";
+import { getCompanies } from "@/api/companies";
 import { useSession } from "next-auth/react";
 
 export default function Companies() {
@@ -74,7 +74,7 @@ export default function Companies() {
 
       <div className="grid grid-cols-1 gap-8 pt-4 xl:grid xl:grid-cols-2">
         {loading ? (
-          <div className="text-center">Loading...</div>
+          <div className="col-span-2 text-center">Loading...</div>
         ) : filteredCompanies.length > 0 ? (
           filteredCompanies.map((companyItem: CompanyItem) => (
             <div key={companyItem.id}>
