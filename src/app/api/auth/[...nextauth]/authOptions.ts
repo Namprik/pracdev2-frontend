@@ -15,13 +15,16 @@ export const authOptions: AuthOptions = {
 
         const user = await userLogIn(credentials.email, credentials.password);
         if (user?.success) {
-          const response = await fetch("http://localhost:5000/api/v1/auth/me", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-              Accept: "application/json",
-            },
-          });
+          const response = await fetch(
+            "https://final-project-vi-backend.vercel.app/api/v1/auth/me",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${user.token}`,
+                Accept: "application/json",
+              },
+            }
+          );
 
           if (response?.ok) {
             const data = await response.json();
@@ -31,8 +34,9 @@ export const authOptions: AuthOptions = {
               ...data.data,
             };
           }
+        } else {
+          return null;
         }
-        return null;
       },
     }),
   ],
