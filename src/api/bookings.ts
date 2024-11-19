@@ -2,7 +2,6 @@ import { resolve } from "path";
 
 // get all bookings
 export async function getBookings(token: string) {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   const response = await fetch(
     "https://final-project-vi-backend.vercel.app/api/v1/bookings",
     {
