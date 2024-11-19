@@ -48,6 +48,7 @@ export default function Booking({ params }: { params: { cid: string } }) {
       }
       if (response.count >= 3) {
         alert("You have reached the maximum booking limit of 3.");
+        router.push("/myBookings");
         return;
       }
 
