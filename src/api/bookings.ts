@@ -3,7 +3,7 @@ import { resolve } from "path";
 // get all bookings
 export async function getBookings(token: string) {
   const response = await fetch(
-    "https://final-project-vi-backend.vercel.app/api/v1/bookings",
+    "https://backend-for-devprac2.vercel.app/api/v1/bookings",
     {
       method: "GET",
       headers: {
@@ -21,7 +21,7 @@ export async function getBookings(token: string) {
 // get booking by id
 export async function getBooking(token: string, bookingId: string) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/bookings/${bookingId}`,
+    `https://backend-for-devprac2.vercel.app/api/v1/bookings/${bookingId}`,
     {
       method: "GET",
       headers: {
@@ -43,7 +43,7 @@ export async function createBooking(
   bookDate: string
 ) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/companies/${cid}/bookings`,
+    `https://backend-for-devprac2.vercel.app/api/v1/companies/${cid}/bookings`,
     {
       method: "POST",
       headers: {
@@ -69,7 +69,7 @@ export async function updateBooking(
   bookDate: string
 ) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/bookings/${bookingId}`,
+    `https://backend-for-devprac2.vercel.app/api/v1/bookings/${bookingId}`,
     {
       method: "PUT",
       headers: {
@@ -91,7 +91,7 @@ export async function updateBooking(
 // delete booking by id
 export async function deleteBooking(token: string, bookingId: string) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/bookings/${bookingId}`,
+    `https://backend-for-devprac2.vercel.app/api/v1/bookings/${bookingId}`,
     {
       method: "DELETE",
       headers: {

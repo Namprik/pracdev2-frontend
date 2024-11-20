@@ -16,7 +16,7 @@ export const authOptions: AuthOptions = {
         const user = await userLogIn(credentials.email, credentials.password);
         if (user?.success) {
           const response = await fetch(
-            "https://final-project-vi-backend.vercel.app/api/v1/auth/me",
+            "https://backend-for-devprac2.vercel.app/api/v1/auth/me",
             {
               method: "GET",
               headers: {

@@ -13,7 +13,7 @@ export interface createCompany {
 // get all companies
 export async function getCompanies() {
   const response = await fetch(
-    "https://final-project-vi-backend.vercel.app/api/v1/companies",
+    "https://backend-for-devprac2.vercel.app/api/v1/companies",
     {
       method: "GET",
       headers: {
@@ -30,7 +30,7 @@ export async function getCompanies() {
 // get company by id
 export async function getCompany(cid: string) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/companies/${cid}`,
+    `https://backend-for-devprac2.vercel.app/api/v1/companies/${cid}`,
     {
       method: "GET",
       headers: {
@@ -47,7 +47,7 @@ export async function getCompany(cid: string) {
 // create company
 export async function createCompany(token: string, data: createCompany) {
   const response = await fetch(
-    "https://final-project-vi-backend.vercel.app/api/v1/companies",
+    "https://backend-for-devprac2.vercel.app/api/v1/companies",
     {
       method: "POST",
       headers: {
@@ -73,7 +73,7 @@ export async function updateCompany(
   data: createCompany
 ) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/companies/${cid}`,
+    `https://backend-for-devprac2.vercel.app/api/v1/companies/${cid}`,
     {
       method: "PUT",
       headers: {
@@ -95,7 +95,7 @@ export async function updateCompany(
 // delete company
 export async function deleteCompany(token: string, cid: string) {
   const response = await fetch(
-    `https://final-project-vi-backend.vercel.app/api/v1/companies/${cid}`,
+    `https://backend-for-devprac2.vercel.app/api/v1/companies/${cid}`,
     {
       method: "DELETE",
       headers: {

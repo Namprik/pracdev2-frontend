@@ -20,7 +20,7 @@ export default function SignUp() {
 
     try {
       const response = await fetch(
-        "https://final-project-vi-backend.vercel.app/api/v1/auth/register",
+        "https://backend-for-devprac2.vercel.app/api/v1/auth/register",
         {
           method: "POST",
           headers: {

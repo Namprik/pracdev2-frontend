@@ -3,7 +3,7 @@ export default async function userLogIn(
   userPassword: string
 ) {
   const response = await fetch(
-    "https://final-project-vi-backend.vercel.app/api/v1/auth/login",
+    "https://backend-for-devprac2.vercel.app/api/v1/auth/login",
     {
       method: "POST",
       headers: {
