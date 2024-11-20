@@ -24,6 +24,7 @@ export default function SignUp() {
         {
           method: "POST",
           headers: {
+            accept: "application/json",
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -54,7 +55,7 @@ export default function SignUp() {
       }
       router.push("/companies");
     } catch (error: unknown) {
-      console.error("Sign-ip error:", error);
+      console.error("Sign-up error:", error);
     }
   };
 
